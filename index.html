@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>تجربة استهلالية: الاتزان السكوني ومركز الكتلة</title>
+<style>
+:root{--bg:#fbf8ef;--card:#fff;--tx:#1d2733;--mu:#5b6775;--ac:#0b6e99;--bd:#d9d2bd;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#161b22;--card:#1f2630;--tx:#e8edf3;--mu:#9aa7b5;--ac:#5cc2ee;--bd:#364050}}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:"Segoe UI",Tahoma,"Noto Naskh Arabic",Arial,sans-serif;line-height:1.9}
+.w{max-width:960px;margin:auto;padding:14px}
+.banner{background:#e8890c;color:#fff;text-align:center;border-radius:14px;padding:6px;font-size:1.5rem;font-weight:bold;margin-bottom:12px}
+h1{text-align:center;color:var(--ac);margin:8px 0}
+h2{color:var(--ac);font-size:1.15rem;margin:0 0 6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:12px 16px;margin:12px 0}
+b.k{color:var(--ac)}
+.n{display:inline-block;background:var(--ac);color:#fff;border-radius:6px;width:26px;height:26px;text-align:center;line-height:26px;font-weight:bold;margin-inline-end:6px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.tabs button{min-width:92px}
+.tabs button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+.sd{background:var(--bg);border:1px dashed var(--bd);border-radius:10px;padding:6px 12px;margin:6px 0}
+canvas{width:100%;height:auto;border-radius:10px;border:1px solid var(--bd);background:#f4f1e8;display:block}
+.ctl{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:10px}
+button{font:inherit;padding:5px 14px;border-radius:8px;border:1px solid var(--bd);background:var(--card);color:var(--tx);cursor:pointer}
+button.p{background:var(--ac);color:#fff;border-color:var(--ac)}
+button:disabled{opacity:.5;cursor:default}
+input[type=range]{accent-color:var(--ac);vertical-align:middle;width:min(380px,60vw)}
+.ro{font-weight:bold;color:var(--ac)}
+.st{font-weight:bold}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;text-align:center}
+th,td{border:1px solid var(--bd);padding:4px 8px}
+th{background:var(--ac);color:#fff}
+textarea{width:100%;min-height:62px;font:inherit;border-radius:8px;border:1px solid var(--bd);background:var(--bg);color:var(--tx);padding:6px}
+.q{margin:10px 0}
+.safe{color:var(--mu)}
+</style>
+</head>
+<body>
+<div class="w">
+<div class="banner">تجربة استهلالية</div>
+<h1>الاتّزان السكوني ومركز الكتلة</h1>
+
+<div class="card">
+<p><b class="k">المواد والأدوات:</b> مسطرة مترية، ثقلان كتلتاهما (g 150) و(g 250)، خطّافان لتعليق الكتل، ميزان إلكتروني، حامل فلزي (نقطة ارتكاز).</p>
+<p class="safe"><b class="k">إرشادات السلامة:</b> الحذر من سقوط الأثقال على القدمين.</p>
+</div>
+
+<div class="card">
+<h2>خطوات العمل</h2>
+<div class="tabs" id="tabs">
+<button data-s="1" class="on">الخطوة 1</button><button data-s="2">الخطوة 2</button><button data-s="3">الخطوة 3</button><button data-s="4">الخطوة 4</button>
+</div>
+<div class="sd" id="sd"></div>
+<canvas id="cv" width="900" height="420"></canvas>
+<div class="ctl" id="c1">
+<button class="p" id="meas">⚖ أقيس كتلة المسطرة</button>
+<span>قراءة الميزان: <span class="ro" id="rd">—</span></span>
+</div>
+<div class="ctl" id="c2" hidden>
+<label>موضع نقطة الارتكاز: <input type="range" id="xp" min="0" max="100" step="0.1" value="30"> <span class="ro" id="xv">30.0</span> cm</label>
+<button id="mn">−0.1</button><button id="pl">+0.1</button>
+<button class="p" id="mark" disabled>أضع إشارة (تسجيل)</button>
+<button id="fb">إظهار القوى</button>
+</div>
+<p id="info" style="margin:8px 0 0" hidden>حالة المسطرة: <span class="st" id="stt"></span> — عزم المحصّلة حول نقطة الارتكاز: <span class="ro" id="tq">0</span> g·cm</p>
+</div>
+
+<div class="card">
+<h2>جدول البيانات</h2>
+<div class="tw"><table><thead><tr><th>الخطوة</th><th>الأثقال المعلّقة</th><th>موضع نقطة الارتكاز (cm)</th></tr></thead><tbody id="tb"><tr id="emp"><td colspan="3">اضبط الاتزان ثم اضغط «أضع إشارة» لتسجيل الموضع.</td></tr></tbody></table></div>
+</div>
+
+<div class="card">
+<h2>التحليل والاستنتاج</h2>
+<div class="q"><b>1.</b> <b class="k">أستنتج:</b> في الخطوة (2)، تؤثّر في المسطرة قوتان هما وزن المسطرة (F<sub>g</sub>)، والقوة العمودية التي تؤثر بها نقطة الارتكاز (F<sub>N</sub>)، أرسم المخطط الحرّ للمسطرة لتوضيح هاتين القوتين؛ مقدارًا واتجاهًا. <span class="safe">(استعن بزر «إظهار القوى» في المحاكاة.)</span><textarea></textarea></div>
+<div class="q"><b>2.</b> أرسم المخطط الحرّ موضحًا الآتي: موقع نقطة الارتكاز، القوى المؤثرة في المسطرة، بُعد كلّ قوة عن نقطة الارتكاز، وذلك للخطوتين (3) و(4).<textarea></textarea></div>
+<div class="q"><b>3.</b> <b class="k">أُصدر حُكمًا:</b> معتمدًا على المخططات التي رسمتها، ماذا أستنتج عن موقع نقطة الارتكاز التي تحقق الاتزان للنظام؟<textarea></textarea></div>
+</div>
+</div>
+
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)},c=$('cv').getContext('2d');
+var S=7,X0=100,Y0=200,BASE=372,MR=100,G=9.8,FS=30;
+var T={
+1:'أقيس كتلة المسطرة، مستخدمًا الميزان.',
+2:'أثبّت المسطرة على الحامل الفلزي، وأحرّكها يمينًا ويسارًا، إلى أن تتزن بوضع أفقي، وأضع إشارة على المسطرة عند موقع الاتزان؛ من المفترض أن تتزن المسطرة عند منتصفها (عند التدريج 50 cm)، تسمى هذه النقطة مركز كتلة المسطرة.',
+3:'أعلّق ثقلًا كتلته (g 150) عند التدريج (20 cm)، وألاحظ اتجاه ميلان المسطرة. أحرّك نقطة الارتكاز إلى أن تستعيد المسطرة وضع الاتزان، أضع إشارة عند هذه النقطة وأرمز لها بالرمز (O).',
+4:'أعلّق ثقلًا إضافيًّا كتلته (g 250) عند التدريج (70 cm)، وأكرّر الخطوة السابقة؛ لإيجاد موقع نقطة الارتكاز (O) الذي يحقق الاتزان للمسطرة.'};
+var L={1:[],2:[],3:[[150,20]],4:[[150,20],[250,70]]};
+var D={1:'—',2:'بدون أثقال',3:'g 150 عند 20 cm',4:'g 150 عند 20 cm + g 250 عند 70 cm'};
+var step=1,ang=0,meas=false,fb=false,marks={},rows={};
+function setStep(s){step=s;[].forEach.call(document.querySelectorAll('#tabs button'),function(b){b.classList.toggle('on',+b.dataset.s===s)});
+ $('sd').innerHTML='<span class="n">'+s+'</span>'+T[s];$('c1').hidden=s!==1;$('c2').hidden=s===1;$('info').hidden=s===1;ang=0;}
+function calc(){var tm=MR,tq=MR*(50-xp());L[step].forEach(function(l){tm+=l[0];tq+=l[0]*(l[1]-xp())});return{tm:tm,tq:tq,d:tq/tm}}
+function xp(){return +$('xp').value}
+function bal(){return Math.abs(calc().d)<0.25}
+document.querySelectorAll('#tabs button').forEach(function(b){b.onclick=function(){setStep(+b.dataset.s)}});
+$('meas').onclick=function(){meas=true;$('rd').textContent=MR.toFixed(1)+' g'};
+$('xp').oninput=function(){$('xv').textContent=(+this.value).toFixed(1)};
+function nudge(v){var e=$('xp');e.value=Math.max(0,Math.min(100,+e.value+v)).toFixed(1);$('xv').textContent=(+e.value).toFixed(1)}
+$('mn').onclick=function(){nudge(-0.1)};$('pl').onclick=function(){nudge(0.1)};
+$('fb').onclick=function(){fb=!fb;this.textContent=fb?'إخفاء القوى':'إظهار القوى'};
+$('mark').onclick=function(){if(!bal())return;marks[step]=+xp().toFixed(1);var e=$('emp');if(e)e.remove();
+ var tr=rows[step];if(!tr){tr=document.createElement('tr');rows[step]=tr;$('tb').appendChild(tr);
+  var t=$('tb'),a=[].slice.call(t.children).sort(function(x,y){return x.dataset.s-y.dataset.s});a.forEach(function(r){t.appendChild(r)})}
+ tr.dataset.s=step;tr.innerHTML='<td>'+step+'</td><td>'+D[step]+'</td><td>'+marks[step].toFixed(1)+(step===2?' (مركز كتلة المسطرة)':' (O)')+'</td>'};
+function arrow(x,y1,y2,col,t,dx){c.strokeStyle=c.fillStyle=col;c.lineWidth=3;c.beginPath();c.moveTo(x,y1);c.lineTo(x,y2);c.stroke();
+ var s=y2>y1?1:-1;c.beginPath();c.moveTo(x,y2);c.lineTo(x-6,y2-9*s);c.lineTo(x+6,y2-9*s);c.fill();c.fillText(t,x+(dx||0),y2+(s>0?16:-6))}
+function draw(){
+ c.clearRect(0,0,900,420);c.textAlign='center';c.font='14px "Segoe UI",Tahoma,Arial';
+ c.fillStyle='#b8b8b8';c.fillRect(0,BASE+22,900,8);
+ if(step===1){
+  c.fillStyle='#4b5563';c.fillRect(250,300,400,70);c.fillStyle='#9ca3af';c.fillRect(260,310,380,50);
+  c.fillStyle='#10202a';c.fillRect(380,320,140,30);c.fillStyle='#66ff99';c.font='bold 20px monospace';c.fillText(meas?MR.toFixed(1)+' g':'0.0 g',450,342);
+  c.fillStyle='#e3b868';c.fillRect(X0,280,700,18);c.strokeStyle='#5a3d1c';c.lineWidth=1;
+  for(var i=0;i<=100;i+=10){c.beginPath();c.moveTo(X0+i*S,280);c.lineTo(X0+i*S,288);c.stroke()}
+  c.fillStyle='#1d2733';c.font='14px "Segoe UI",Tahoma,Arial';c.fillText('ميزان إلكتروني',450,395);c.fillText('مسطرة مترية',450,268);return}
+ var P=calc(),px=X0+S*xp(),tgt=bal()?0:Math.max(-14,Math.min(14,P.d*2.5));
+ ang+=(tgt-ang)*0.12;var a=ang*Math.PI/180;
+ // stand
+ c.fillStyle='#8a929c';c.fillRect(px-5,Y0+14,10,BASE-Y0-14);
+ c.fillStyle='#69727d';c.fillRect(px-45,BASE,90,12);
+ c.beginPath();c.moveTo(px-14,Y0+14);c.lineTo(px+14,Y0+14);c.lineTo(px,Y0-2);c.fill();
+ c.fillStyle='#3d4650';c.fillRect(px-9,Y0+10,18,6);
+ // ruler
+ c.save();c.translate(px,Y0);c.rotate(a);
+ var x0=-S*xp();c.fillStyle='#e3b868';c.fillRect(x0,-11,S*100,22);c.strokeStyle='#5a3d1c';c.fillStyle='#3b2a12';c.lineWidth=1;c.font='10px Arial';
+ for(var j=0;j<=100;j+=5){c.beginPath();c.moveTo(x0+j*S,-11);c.lineTo(x0+j*S,j%10?-5:-1);c.stroke();if(j%10===0)c.fillText(j,x0+j*S,10)}
+ [2,3,4].forEach(function(s){if(marks[s]!==undefined&&(s<=step)&&(s===2||s===step)){var m=x0+marks[s]*S;c.fillStyle=s===2?'#1b8a3a':'#c0392b';c.beginPath();c.moveTo(m,-12);c.lineTo(m-6,-24);c.lineTo(m+6,-24);c.fill();c.font='bold 13px Arial';c.fillText(s===2?'CM':'O',m,-28);c.font='10px Arial'}});
+ c.restore();
+ var hs=[];
+ L[step].forEach(function(l){var d=(l[1]-xp())*S,wx=px+d*Math.cos(a),wy=Y0+d*Math.sin(a);
+  c.strokeStyle='#444';c.lineWidth=1.5;c.beginPath();c.moveTo(wx,wy+11);c.lineTo(wx,wy+50);c.stroke();
+  var h=l[0]>200?42:34,w=l[0]>200?40:32;c.fillStyle=l[0]>200?'#5b6b7a':'#7c8a99';c.fillRect(wx-w/2,wy+50,w,h);
+  c.fillStyle='#fff';c.font='bold 12px Arial';c.fillText(l[0]+' g',wx,wy+50+h/2+4);
+  hs.push({x:wx,y:wy,m:l[0]})});
+ // forces
+ if(fb){c.font='bold 13px Arial';
+  var cm=50-xp(),cx=px+cm*S*Math.cos(a),cy=Y0+cm*S*Math.sin(a);
+  arrow(cx+6,cy+12,cy+12+MR/1000*G*FS,'#c0392b','Fg = '+(MR/1000*G).toFixed(2)+' N',24);
+  hs.forEach(function(h){var f=h.m/1000*G;arrow(h.x+16,h.y+12,h.y+12+f*FS,'#c0392b',f.toFixed(2)+' N',22)});
+  var fn=P.tm/1000*G;arrow(px,Y0-30,Y0-30-fn*FS*0.75,'#1b6ec2','FN = '+fn.toFixed(2)+' N',34);
+  c.fillStyle='#1d2733';c.font='13px Arial';
+  [ [50,'50 cm'] ].forEach(function(){});
+  var by=BASE+46;c.strokeStyle='#1d2733';c.lineWidth=1;
+  var pts=[[50,'CM']].concat(L[step].map(function(l){return[l[1],l[0]+' g']}));
+  pts.forEach(function(p,i){var x1=px,x2=X0+p[0]*S,y=by+i*0;if(Math.abs(x2-x1)<2)return;var yy=BASE+40+i*0;});
+ }
+ // readout state
+ var st=bal()?'متّزنة (أفقية)':(P.d>0?'تميل جهة اليمين':'تميل جهة اليسار');
+ $('stt').textContent=st;$('tq').textContent=P.tq.toFixed(0);
+ $('mark').disabled=!bal();
+ c.fillStyle='#1d2733';c.font='13px "Segoe UI",Tahoma,Arial';c.fillText('نقطة الارتكاز عند '+xp().toFixed(1)+' cm',px,BASE+44);
+}
+function loop(){draw();requestAnimationFrame(loop)}
+setStep(1);loop();
+})();
+</script>
+</body>
+</html>
